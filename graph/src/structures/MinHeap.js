@@ -36,10 +36,10 @@ class MinHeap {
         let left=index*2 +1;
         let right=index*2 +2;
         let smallest=index;
-        if(smallest<size&& this.heap[left].distance<this.heap[smallest].distance){
+        if(left<size&& this.heap[left].distance<this.heap[smallest].distance){
             smallest=left;
         }
-        if(smallest<size && this.heap[right].distance<this.heap[smallest].distance){
+        if(right<size && this.heap[right].distance<this.heap[smallest].distance){
             smallest=right;
         }
         if(smallest===index)break;

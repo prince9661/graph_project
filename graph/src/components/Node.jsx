@@ -10,6 +10,7 @@ function Node({node , onMouseDown, onMouseEnter, onMouseUp}) {
     }
     else if (node.isPath) bgColor = "bg-yellow-400";
     else if (node.isWall) bgColor = "bg-black";
+    else if (node.weight > 1) bgColor = "bg-purple-400";
     else if (node.isVisited) bgColor = "bg-blue-400";
 
   return (
@@ -17,7 +18,13 @@ function Node({node , onMouseDown, onMouseEnter, onMouseUp}) {
     onMouseDown={onMouseDown}
     onMouseEnter={onMouseEnter}
     onMouseUp={onMouseUp}
-    className={`w-5 h-5 border border-gray-400 ${bgColor}`}></div>
+    className={`w-5 h-5 border border-gray-400 ${bgColor}`}>
+      {node.weight > 1 && (
+        <span className="text-xs text-white">
+          {node.weight}
+        </span>
+      )}
+    </div>
   )
 }
 

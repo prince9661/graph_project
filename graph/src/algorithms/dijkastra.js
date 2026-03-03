@@ -3,9 +3,9 @@ import { getNeighbors } from "../utils/getNeighbors";
 
 export function dijkastra(grid,startNode,endNode){
     const pq=new MinHeap();
-    pq.insert(startNode)
     startNode.distance=0;
-    startNode.Visited=true;
+    pq.insert(startNode)
+    // startNode.Visited=true;
     const visitedNode=[];
     while(!pq.isEmpty()){
         const currentNode=pq.extractMin();
@@ -15,11 +15,13 @@ export function dijkastra(grid,startNode,endNode){
         if(currentNode===endNode)return visitedNode;
         const neighbors=getNeighbors(currentNode,grid);
         for(const neighbor of neighbors){
-            if (neighbor.visited || neighbor.isWall) continue;
+            if (neighbor.Visited || neighbor.isWall) continue;
             const newDist = currentNode.distance + neighbor.weight;
-            neighbor.distance=newDist;
-            neighbor.previousNode=currentNode;
-            pq.insert(neighbor);
+            if (newDist < neighbor.distance){
+                neighbor.distance=newDist;
+                neighbor.previousNode=currentNode;
+                pq.insert(neighbor);
+            }
         }
     }
     return visitedNode;

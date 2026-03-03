@@ -7,6 +7,8 @@ import { bfs } from "./algorithms/bfs";
 import { getShortestPath } from "./algorithms/getShortestPath";
 import { animate } from './animations/animate';
 import { dfs } from './algorithms/dfs';
+import { dijkastra } from './algorithms/dijkastra';
+import { gridInteractions } from './animations/gridInteractions';
 
 const ROWS =35;
 const COLS= 70;
@@ -17,7 +19,10 @@ function App() {
   const [isMousePressed, setIsMousePressed] = useState(false);
   // ............
   const [mode, setMode] = useState(null); 
-  // "start" | "end" | null
+  const [weightValue, setWeightValue] = useState(5);
+  const [isErasingWeight, setIsErasingWeight] = useState(false);
+
+  // "start" | "end" | "weight" | null 
 
   const [startPos, setStartPos] = useState({ row: 10, col: 5 });
   const [endPos, setEndPos] = useState({ row: 30, col: 65 });
@@ -25,7 +30,13 @@ function App() {
     setGrid(createGrid());
   },[])
 
+  const increaseWeight = () => {
+    setWeightValue(prev => prev + 1);
+  };
 
+  const decreaseWeight = () => {
+    setWeightValue(prev => (prev > 1 ? prev - 1 : 1));
+  };
   function createNode(row, col) {
     return {
       row,
@@ -55,117 +66,25 @@ function App() {
     return grid;
   };
 
+  const {
+    handleMouseDown,
+    handleMouseEnter,
+    handleMouseUp
+  } = gridInteractions({
+    grid,
+    setGrid,
+    startPos,
+    endPos,
+    setStartPos,
+    setEndPos,
+    weightValue,
+    mode,
+    isMousePressed,
+    setIsMousePressed,
+    isErasingWeight,
+    setIsErasingWeight
+  });
 
-  // const updateStartEnd = (row, col, type) => {
-
-  //   setGrid(prevGrid => {
-
-  //     const newGrid = prevGrid.map(r => r.map(node => ({ ...node })));
-
-  //     // remove old start/end
-  //     for (let r of newGrid) {
-  //       for (let node of r) {
-  //         if (type === "start") node.isStart = false;
-  //         if (type === "end") node.isEnd = false;
-  //       }
-  //     }
-
-  //     // set new one
-  //     if (type === "start") {
-  //       newGrid[row][col].isStart = true;
-  //       setStartPos({ row, col });
-  //     } else {
-  //       newGrid[row][col].isEnd = true;
-  //       setEndPos({ row, col });
-  //     }
-
-  //     return newGrid;
-  //   });
-  // };
-  const updateStartEnd = (row, col, type) => {
-
-    setGrid(prevGrid => {
-
-      const newGrid = [...prevGrid];
-
-      if (type === "start") {
-
-        // copy old start row
-        const oldRow = [...newGrid[startPos.row]];
-        oldRow[startPos.col] = {
-          ...oldRow[startPos.col],
-          isStart: false
-        };
-        newGrid[startPos.row] = oldRow;
-
-        // copy new row
-        const newRow = [...newGrid[row]];
-        newRow[col] = {
-          ...newRow[col],
-          isStart: true,
-          isWall:false
-        };
-        newGrid[row] = newRow;
-
-        setStartPos({ row, col });
-
-      } else {
-
-        const oldRow = [...newGrid[endPos.row]];
-        oldRow[endPos.col] = {
-          ...oldRow[endPos.col],
-          isEnd: false
-        };
-        newGrid[endPos.row] = oldRow;
-
-        const newRow = [...newGrid[row]];
-        newRow[col] = {
-          ...newRow[col],
-          isEnd: true,
-          isWall:false
-        };
-        newGrid[row] = newRow;
-
-        setEndPos({ row, col });
-      }
-
-      return newGrid;
-    });
-  };
-  const toggleWall =(row ,col)=>{
-    setGrid(prevGrid=>{
-      const newgrid=prevGrid.map(r =>r.map(cell=>({...cell})))
-      const node=newgrid[row][col];
-      if(node.isStart || node.isEnd)return prevGrid;
-      node.isWall=!node.isWall
-      return newgrid
-
-    })
-  }
-  const handleMouseDown = (row, col) => {
-    if (mode === "start") {
-      updateStartEnd(row, col, "start");
-      setMode(null);
-      return;
-    }
-
-    if (mode === "end") {
-      updateStartEnd(row, col, "end");
-      setMode(null);
-      return;
-    }
-    setIsMousePressed(true);
-    toggleWall(row, col);
-  };
-
-  const handleMouseEnter = (row, col) => {
-    if (!isMousePressed) return;
-    toggleWall(row, col);
-  };
-
-  const handleMouseUp = () => {
-    setIsMousePressed(false);
-  };
   const cleargrid = () => {
     setGrid(prevGrid =>
       prevGrid.map(row =>
@@ -176,7 +95,8 @@ function App() {
           Visited:false,
           isPath:false,
           previousNode:null,
-          distance: Infinity
+          distance: Infinity,
+          weight :1,
         }))
       )
     );
@@ -252,7 +172,18 @@ function App() {
 
     
   };
+  const runDijkastra =()=>{
+    resetNodes(grid);
+    const start=grid[startPos.row][startPos.col];
+    const end=grid[endPos.row][endPos.col];
+    const visited=dijkastra(grid,start,end);
+    if(!end.previousNode){
+      console.log("no path found");
 
+    }
+    const path=getShortestPath(end);
+    animate(visited,path,setGrid);
+  }
 
 
   return (
@@ -266,6 +197,9 @@ function App() {
       </button>
       <button onClick={ runBFS} className='bg-red-400 rounded-md px-4 py-2'>
         Run BFS
+      </button>
+      <button onClick={ runDijkastra} className='bg-red-400 rounded-md px-4 py-2'>
+        Run Dijkastra
       </button>
       <button onClick={resetGridState} className='bg-red-400 rounded-md px-4 py-2'>
         Reset grid
@@ -283,6 +217,43 @@ function App() {
       >
         Select End
       </button>
+      {/* Weight Controls */}
+      <div className="flex items-center gap-2">
+        <button 
+          onClick={() => setMode("wall")}
+          className={`px-4 py-2 rounded ${
+            mode === "wall" ? "bg-black text-white" : "bg-gray-400"
+          }`}
+        >
+          Wall
+        </button>
+
+        <button 
+          onClick={decreaseWeight}
+          className="bg-gray-500 px-3 py-2 rounded"
+        >
+          -
+        </button>
+
+        <span className="font-bold text-lg w-6 text-center">
+          {weightValue}
+        </span>
+
+        <button 
+          onClick={increaseWeight}
+          className="bg-gray-500 px-3 py-2 rounded"
+        >
+          +
+        </button>
+
+        <button 
+          onClick={() => setMode("weight")}
+          className="bg-purple-500 px-4 py-2 rounded"
+        >
+          Add Weight
+        </button>
+
+      </div>
     </div>
       <div className=" bg-gray-100 flex items-center justify-center">
       <Grid grid={grid} 
