@@ -2,7 +2,7 @@ import MinHeap from "../structures/MinHeap";
 import { getNeighbors } from "../utils/getNeighbors";
 
 export function dijkastra(grid,startNode,endNode){
-    const pq=new MinHeap();
+    const pq = new MinHeap((a, b) => a.distance - b.distance);
     startNode.distance=0;
     pq.insert(startNode)
     // startNode.Visited=true;
