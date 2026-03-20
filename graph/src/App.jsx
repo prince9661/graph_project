@@ -229,14 +229,14 @@ function App() {
           
           <button
             onClick={() => setMode("start")}
-            className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded"
+            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
           >
             Select Start
           </button>
 
           <button
             onClick={() => setMode("end")}
-            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
+            className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded"
           >
             Select End
           </button>
