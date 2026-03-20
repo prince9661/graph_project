@@ -23,9 +23,7 @@ This project helps students and developers learn how graph algorithms work step-
 - Depth First Search (DFS)
 - Dijkstra's Shortest Path Algorithm
 - A* Pathfinding Algorithm
-- Minimum Spanning Tree (Prim's Algorithm)
-- Kruskal's Algorithm
-- Topological Sorting
+
 
 ---
 
@@ -45,4 +43,3 @@ This project helps students and developers learn how graph algorithms work step-
 
 ---
 
-##  Project Structure
