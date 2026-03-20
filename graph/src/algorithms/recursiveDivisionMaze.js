@@ -14,9 +14,13 @@ export function recursiveDivisionMaze(grid, startPos, endPos) {
       const gap = Math.floor(
         randomNumber(colStart, colEnd) / 2
       ) * 2 + 1;
+      const gap2 = Math.floor(
+        randomNumber(colStart, colEnd) / 2
+      ) * 2 + 1;
 
       for (let col = colStart; col <= colEnd; col++) {
         if (col === gap || col===gap*2) continue;
+        if (col === gap2 || col===gap2*2) continue;
 
 
         const node = grid[row][col];
@@ -41,9 +45,13 @@ export function recursiveDivisionMaze(grid, startPos, endPos) {
       const gap = Math.floor(
         randomNumber(rowStart, rowEnd) / 2
       ) * 2 + 1;
+      const gap2 = Math.floor(
+        randomNumber(rowStart, rowEnd) / 2
+      ) * 2 + 1;
 
       for (let row = rowStart; row <= rowEnd; row++) {
         if (row === gap|| row===gap*2) continue;
+        if (row === gap2|| row===gap2*2) continue;
 
         const node = grid[row][col];
 

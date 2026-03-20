@@ -198,44 +198,45 @@ function App() {
         <div className="p-2 flex items-center justify-center gap-2">
           <button
             onClick={cleargrid}
-            className="bg-red-400 rounded-md px-4 py-2"
+            className="bg-gray-500 hover:bg-gray-600 text-white rounded-md px-4 py-2"
           >
             clear grid
           </button>
-          <button onClick={runDFS} className="bg-red-400 rounded-md px-4 py-2">
+          <button
+            onClick={resetGridState}
+            className="bg-yellow-500 hover:bg-yellow-600 text-white rounded-md px-4 py-2"
+          >
+            Reset grid
+          </button>
+          <button onClick={runDFS} className="bg-blue-500 hover:bg-blue-600 rounded-md px-4 py-2">
             Run DFS
           </button>
-          <button onClick={runBFS} className="bg-red-400 rounded-md px-4 py-2">
+          <button onClick={runBFS} className="bg-blue-500 hover:bg-blue-600 rounded-md px-4 py-2">
             Run BFS
           </button>
           <button
             onClick={runDijkastra}
-            className="bg-red-400 rounded-md px-4 py-2"
+            className="bg-indigo-500 hover:bg-indigo-600 rounded-md px-4 py-2"
           >
             Run Dijkastra
           </button>
           <button
             onClick={astarcall}
-            className="bg-red-400 rounded-md px-4 py-2"
+            className="bg-purple-500 hover:bg-purple-600 rounded-md px-4 py-2"
           >
-            Run A star
+            Run A * 
           </button>
-          <button
-            onClick={resetGridState}
-            className="bg-red-400 rounded-md px-4 py-2"
-          >
-            Reset grid
-          </button>
+          
           <button
             onClick={() => setMode("start")}
-            className="bg-blue-500 px-4 py-2 rounded"
+            className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded"
           >
             Select Start
           </button>
 
           <button
             onClick={() => setMode("end")}
-            className="bg-green-500 px-4 py-2 rounded"
+            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
           >
             Select End
           </button>
@@ -243,8 +244,8 @@ function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setMode("wall")}
-              className={`px-4 py-2 rounded ${
-                mode === "wall" ? "bg-black text-white" : "bg-gray-400"
+              className={`px-4 py-2 rounded hover:bg-gray-800 ${
+                mode === "wall" ? "bg-black text-white" : "bg-gray-700"
               }`}
             >
               Wall
@@ -252,7 +253,7 @@ function App() {
 
             <button
               onClick={decreaseWeight}
-              className="bg-gray-500 px-3 py-2 rounded"
+              className="bg-gray-400 hover:bg-gray-500 px-3 py-2 rounded"
             >
               -
             </button>
@@ -263,20 +264,20 @@ function App() {
 
             <button
               onClick={increaseWeight}
-              className="bg-gray-500 px-3 py-2 rounded"
+              className="bg-gray-400 hover:bg-gray-500 px-3 py-2 rounded"
             >
               +
             </button>
 
             <button
               onClick={() => setMode("weight")}
-              className="bg-purple-500 px-4 py-2 rounded"
+              className="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded"
             >
               Add Weight
             </button>
             <button
               onClick={generateMazeHandler}
-              className="bg-purple-500 px-4 py-2 rounded"
+              className="bg-pink-500 hover:bg-pink-600 px-4 py-2 rounded"
             >
               Generate Maze
             </button>
